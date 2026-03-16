@@ -1,5 +1,5 @@
 # Ex.No: 03   COMPUTE THE AUTO FUNCTION(ACF)
-Date: 
+Date: 27:02:2026
 
 ### AIM:
 To Compute the AutoCorrelation Function (ACF) of the data for the first 35 lags to determine the model
@@ -24,20 +24,51 @@ data = [3, 16, 156, 47, 246, 176, 233, 140, 130,
 
 lags = range(35)
 
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-#Pre-allocate autocorrelation table
+# 1. Load dataset (Using relative path for GitHub)
+data = pd.read_csv("faang_stock_prices.csv")
 
-#Mean
+# 2. Convert Date column 
+data['Date'] = pd.to_datetime(data['Date'])
 
-#Variance
+# 3. Use Close price
+series = data['Close'].values
+N = len(series)
 
-#Normalized data
+# 4. Define lags (Up to 200)
+lags = range(200)
+autocorr_values = []
 
-#Go through lag components one-by-one
+# 5. Mean & Variance
+mean_data = np.mean(series)
+variance_data = np.var(series)
 
-#display the graph
+# 6. Compute ACF manually
+for lag in lags:
+    if lag == 0:
+        autocorr_values.append(1)
+    else:
+        auto_cov = np.sum((series[:-lag] - mean_data) * (series[lag:] - mean_data)) / N
+        autocorr_values.append(auto_cov / variance_data)
+
+# 7. Plot
+plt.figure(figsize=(10,6))
+plt.stem(lags, autocorr_values)
+plt.title("Autocorrelation Function (ACF) - FAANG Stocks")
+plt.xlabel("Lag")
+plt.ylabel("Autocorrelation")
+plt.grid(True)
+plt.show()
+
+
+```
 
 ### OUTPUT:
+<img width="798" height="440" alt="image" src="https://github.com/user-attachments/assets/71c04b90-acfc-44e9-a73d-dd11c9d8d207" />
 
 ### RESULT:
         Thus we have successfully implemented the auto correlation function in python.
